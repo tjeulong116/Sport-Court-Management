@@ -12,7 +12,10 @@ app.set('views', __dirname + '/views');
 //config routes
 webRoutes(app);
 
+//config static files : css/images/js
+app.use(express.static('public'));
+
 app.listen(process.env.PORT, () => {
-    console.log("My app is running ok")
-    console.log(`env port: ${process.env.PORT}`)
+    console.log("My app is running ok");
+    console.log(`env port: ${process.env.PORT}`);
 })

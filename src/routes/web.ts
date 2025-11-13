@@ -8,7 +8,7 @@ const webRoutes = (app: Express) => {
     })
 
     router.get("/hoidanit", (req, res) => {
-        res.send("Hello Hieu");
+        res.send("Hello Hieu web");
     })
 
     router.get("/abc", (req, res) => {
