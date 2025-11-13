@@ -32,6 +32,7 @@
   },
   "homepage": "https://github.com/tjeulong116/nodejs-pro-hieubk#readme",
   "dependencies": {
+    "dotenv": "16.4.7",
     "express": "5.0.1"
   },
   "devDependencies": {
