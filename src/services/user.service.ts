@@ -1,4 +1,4 @@
-import getConnection from "../config/database";
+import getConnection from "config/database";
 
 const handleCreateUser = async (fullName: string, email: string, address: string) => {
     //insert into database
@@ -12,9 +12,6 @@ const handleCreateUser = async (fullName: string, email: string, address: string
         console.log(err);
         return [];
     }
-
-    //return result 
-    console.log(">>> insert a new user");
 }
 
 const getAllUsers = async () => {
@@ -28,8 +25,19 @@ const getAllUsers = async () => {
         return results;
     } catch (err) {
         console.log(err);
-        return [];
     }
 }
 
-export { handleCreateUser, getAllUsers };
+const handleDeleteUser = async (id: string) => {
+    const connection = await getConnection();
+    try {
+        const sql = 'DELETE FROM `users` WHERE `id` = ?';
+        const values = [id];
+
+        const [result, fields] = await connection.execute(sql, values);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+export { handleCreateUser, getAllUsers, handleDeleteUser };
