@@ -18,14 +18,14 @@ const postCreateUser = async (req: Request, res: Response) => {
     const { fullName, email, address } = req.body;
 
     //handle create user
-    await handleCreateUser(fullName, email, address);
+    const a = await handleCreateUser(fullName, email, address);
 
     return res.redirect('/');
 }
 
 const postDeleteUser = async (req: Request, res: Response) => {
     const { id } = req.params;
-    await handleDeleteUser(id);
+    const a = await handleDeleteUser(id);
 
     return res.redirect('/');
 }
