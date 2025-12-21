@@ -29,4 +29,16 @@ const isAdmin = (req: Request, res: Response, next: NextFunction) => {
     next();
 }
 
-export { isLogin, isAdmin };
+const requireAuth = (req: Request, res: Response, next: NextFunction) => {
+    if (req.isAuthenticated && req.isAuthenticated()) {
+        return next();
+    }
+
+    return res.status(401).json({
+        success: false,
+        message: "Authentication required",
+    });
+};
+
+
+export { isLogin, isAdmin, requireAuth };

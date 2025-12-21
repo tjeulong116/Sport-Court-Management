@@ -1,5 +1,5 @@
 import express, { Express } from 'express';
-import { getHomePage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUser, postUpdateUser, getProductFilterPage } from 'controllers/user.controller';
+import { getHomePage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUser, postUpdateUser, getProductFilterPage, getBookingPage } from 'controllers/user.controller';
 import { getAdminOrderDetailPage, getAdminOrderPage, getAdminProductPage, getAdminUserPage, getDashboardPage } from 'controllers/admin/dashboard.controller';
 import fileUploadMiddleware from 'src/middleware/multer';
 import { getAdminCreateProductPage, getViewProduct, postAdminCreateProduct, postDeleteProduct, postUpdateProduct } from 'controllers/admin/product.controller';
@@ -7,6 +7,9 @@ import { getCartPage, getCheckOutPage, getOrderHistoryPage, getProductPage, getT
 import { getLoginPage, getRegisterPage, getSuccessRedirectPage, postLogout, postRegister } from 'controllers/client/auth.controller';
 import passport from 'passport';
 import { isAdmin, isLogin } from 'src/middleware/auth';
+import { createPricing, deletePricing, getPricingPage } from 'controllers/admin/pricing.controller';
+import { cancelBooking, getAdminBookingPage, markBookingPaid } from 'services/admin/booking.service';
+import { getBookingDetailPage, postCreateBooking } from 'controllers/admin/booking.controller';
 
 const router = express.Router();
 
@@ -37,6 +40,8 @@ const webRoutes = (app: Express) => {
     router.get("/order-history", getOrderHistoryPage);
     router.post("/add-to-cart-from-detail-page/:id", postAddToCartFromDetailPage);
 
+    router.get("/booking", getBookingPage);
+
     //admin routes
     router.get("/admin", getDashboardPage);
     router.get("/admin/user", getAdminUserPage);
@@ -57,7 +62,21 @@ const webRoutes = (app: Express) => {
     router.get("/admin/order", getAdminOrderPage);
     router.get("/admin/order/:id", getAdminOrderDetailPage);
 
+    // pricing management
+    router.get("/admin/pricing", isAdmin, getPricingPage);
+    router.post("/admin/pricing", isAdmin, createPricing);
+    router.post("/admin/pricing/delete/:id", isAdmin, deletePricing);
+
+    router.get("/admin/booking", isAdmin, getAdminBookingPage);
+    router.post("/admin/booking/cancel/:id", isAdmin, cancelBooking);
+    router.post("/admin/booking/paid/:id", isAdmin, markBookingPaid);
+
+    router.get("/admin/booking/detail", isAdmin, getBookingDetailPage);
+    router.post("/admin/booking/create", isAdmin, postCreateBooking);
+
+
     app.use("/", isAdmin, router);
+
 }
 
 export default webRoutes;

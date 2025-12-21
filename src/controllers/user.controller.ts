@@ -43,6 +43,14 @@ const getProductFilterPage = async (req: Request, res: Response) => {
     });
 }
 
+const getBookingPage = async (req: Request, res: Response) => {
+    const date =
+        (req.query.date as string) ||
+        new Date().toISOString().split("T")[0];
+
+    res.render("client/booking/show.ejs", { date });
+};
+
 const getCreateUserPage = async (req: Request, res: Response) => {
     const roles = await getAllRoles();
 
@@ -91,4 +99,4 @@ const postUpdateUser = async (req: Request, res: Response) => {
     return res.redirect('/admin/user');
 }
 
-export { getHomePage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUser, postUpdateUser, getProductFilterPage };
+export { getHomePage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUser, postUpdateUser, getProductFilterPage, getBookingPage };

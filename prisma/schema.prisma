@@ -13,6 +13,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum BookingStatus {
+  PENDING
+  PAID
+  CANCELLED
+}
+
 model Session {
   id        String   @id
   sid       String   @unique
@@ -34,7 +40,8 @@ model User {
   roleId Int
   cart   Cart?
 
-  orders Order[]
+  orders   Order[]
+  bookings Booking[]
 
   @@map("users")
 }
@@ -124,4 +131,45 @@ model OrderDetail {
   productId Int
 
   @@map("order_detail")
+}
+
+model Court {
+  id       Int     @id @default(autoincrement())
+  name     String
+  isActive Boolean @default(true)
+
+  bookings Booking[]
+  pricing  PricingRule[]
+}
+
+model PricingRule {
+  id        Int      @id @default(autoincrement())
+  courtId   Int? // null = apply to all courts
+  date      DateTime // exact day
+  startTime String // "18:00"
+  endTime   String // "22:00"
+  price     Int // VND per 30 mins
+  isActive  Boolean  @default(true)
+
+  court Court? @relation(fields: [courtId], references: [id])
+
+  @@index([date])
+}
+
+model Booking {
+  id        Int           @id @default(autoincrement())
+  courtId   Int
+  userId    Int
+  date      DateTime
+  startTime String // "18:00"
+  endTime   String // "18:30"
+  price     Int // snapshot price
+  status    BookingStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+
+  court Court @relation(fields: [courtId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@unique([courtId, date, startTime])
+  @@index([date])
 }

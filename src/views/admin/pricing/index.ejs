@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Admin Pricing Management" />
+    <meta name="author" content="Admin" />
+    <title>Manage Pricing</title>
+
+    <link href="/admin/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="sb-nav-fixed">
+    <%- include('../layout/header'); -%>
+
+        <div id="layoutSidenav">
+            <%- include('../layout/sidenav'); -%>
+
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+
+                            <!-- PAGE TITLE -->
+                            <h1 class="mt-4">Pricing Management</h1>
+                            <ol class="breadcrumb mb-4">
+                                <li class="breadcrumb-item">
+                                    <a href="/admin">Dashboard</a>
+                                </li>
+                                <li class="breadcrumb-item active">Pricing</li>
+                            </ol>
+
+                            <!-- DATE FILTER -->
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <form method="get" action="/admin/pricing" class="row g-3 align-items-center">
+                                        <div class="col-auto">
+                                            <label class="col-form-label fw-bold">Select date:</label>
+                                        </div>
+                                        <div class="col-auto">
+                                            <input type="date" name="date" value="<%= date %>" class="form-control" />
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-search"></i> Load
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- ADD PRICING RULE -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-plus-circle me-1"></i>
+                                    Add Pricing Rule
+                                </div>
+                                <div class="card-body">
+                                    <form method="post" action="/admin/pricing" class="row g-3" id="pricingForm">
+                                        <input type="hidden" name="date" value="<%= date %>" />
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">Start Time</label>
+                                            <select name="startTime" id="startTime" class="form-select" required>
+                                                <% for (let h=0; h < 24; h++) { %>
+                                                    <% for (let m of ["00", "30" ]) { %>
+                                                        <option value="<%= String(h).padStart(2,'0') %>:<%= m %>">
+                                                            <%= String(h).padStart(2,'0') %>:<%= m %>
+                                                        </option>
+                                                        <% } %>
+                                                            <% } %>
+                                            </select>
+
+                                        </div>
+
+                                        <div class=" col-md-3">
+                                            <label class="form-label">End Time</label>
+                                            <select name="endTime" id="endTime" class="form-select" required>
+                                                <% for (let h=0; h < 24; h++) { %>
+                                                    <% for (let m of ["00", "30" ]) { %>
+                                                        <option value="<%= String(h).padStart(2,'0') %>:<%= m %>">
+                                                            <%= String(h).padStart(2,'0') %>:<%= m %>
+                                                        </option>
+                                                        <% } %>
+                                                            <% } %>
+                                            </select>
+
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">Price (VND / 30 min)</label>
+                                            <input type="number" name="price" class="form-control" required />
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">Court</label>
+                                            <select name="courtId" class="form-select">
+                                                <option value="">All Courts</option>
+                                                <% courts.forEach(court=> { %>
+                                                    <option value="<%= court.id %>">
+                                                        <%= court.name %>
+                                                    </option>
+                                                    <% }) %>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="fas fa-save"></i> Save Pricing
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- PRICING TABLE -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-table me-1"></i>
+                                    Pricing Rules for <strong>
+                                        <%= date %>
+                                    </strong>
+                                </div>
+
+                                <div class="card-body">
+                                    <table class="table table-hover table-bordered">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Time Range</th>
+                                                <th>Price</th>
+                                                <th>Court</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% if (rules.length===0) { %>
+                                                <tr>
+                                                    <td colspan="4" class="text-center text-muted">
+                                                        No pricing rules found for this date
+                                                    </td>
+                                                </tr>
+                                                <% } %>
+
+                                                    <% rules.forEach(rule=> { %>
+                                                        <tr>
+                                                            <td>
+                                                                <%= rule.startTime %> - <%= rule.endTime %>
+                                                            </td>
+                                                            <td>
+                                                                <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
+                                                                    currency: 'VND' }).format(rule.price) %>
+                                                            </td>
+                                                            <td>
+                                                                <%= rule.court ? rule.court.name : "All Courts" %>
+                                                            </td>
+                                                            <td>
+                                                                <form method="post"
+                                                                    action="/admin/pricing/delete/<%= rule.id %>"
+                                                                    onsubmit="return confirm('Delete this pricing rule?')">
+                                                                    <button class="btn btn-danger btn-sm">
+                                                                        <i class="fas fa-trash"></i> Delete
+                                                                    </button>
+                                                                </form>
+                                                            </td>
+                                                        </tr>
+                                                        <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </main>
+
+                    <%- include('../layout/footer'); -%>
+                </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous"></script>
+        <script src="/admin/js/scripts.js"></script>
+        <script>
+            document.getElementById("pricingForm").addEventListener("submit", function (e) {
+                const start = document.getElementById("startTime").value;
+                const end = document.getElementById("endTime").value;
+
+                if (!start || !end) return;
+
+                if (end <= start) {
+                    e.preventDefault();
+                    alert("End time must be later than start time.");
+                }
+            });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous"></script>
+        <script src="/admin/js/scripts.js"></script>
+
+        <script>
+            document.getElementById("pricingForm").addEventListener("submit", function (e) {
+                const start = document.getElementById("startTime").value;
+                const end = document.getElementById("endTime").value;
+
+                if (!start || !end) return;
+
+                if (end <= start) {
+                    e.preventDefault();
+                    alert("End time must be later than start time.");
+                }
+            });
+        </script>
+
+
+</body>
+
+</html>

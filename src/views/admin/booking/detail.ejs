@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Booking Detail</title>
+
+    <link href="/admin/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="sb-nav-fixed">
+    <%- include('../layout/header'); -%>
+
+        <div id="layoutSidenav">
+            <%- include('../layout/sidenav'); -%>
+
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+
+                            <h1 class="mt-4">Booking Detail</h1>
+                            <ol class="breadcrumb mb-4">
+                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/booking">Bookings</a></li>
+                                <li class="breadcrumb-item active">Detail</li>
+                            </ol>
+
+                            <div class="row">
+                                <div class="col-6 mx-auto">
+
+                                    <% if (booking) { %>
+                                        <!--  BOOKED → VIEW DETAIL -->
+                                        <h5 class="mb-3">Booking Detail</h5>
+
+                                        <table class="table table-bordered">
+                                            <tr>
+                                                <th>Customer</th>
+                                                <td>
+                                                    <%= booking.user.fullName %>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Username</th>
+                                                <td>
+                                                    <%= booking.user.username %>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Phone</th>
+                                                <td>
+                                                    <%= booking.user.phone %>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Address</th>
+                                                <td>
+                                                    <%= booking.user.address %>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Court</th>
+                                                <td>
+                                                    <%= booking.court.name %>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Date</th>
+                                                <td>
+                                                    <%= date %>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Time</th>
+                                                <td>
+                                                    <%= time %>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Price</th>
+                                                <td>
+                                                    <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
+                                                        currency: 'VND' }).format(booking.price) %>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Booked At</th>
+                                                <td>
+                                                    <%= booking.createdAt.toLocaleString() %>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <% } else if (isPast) { %>
+                                            <!--  PAST + NOT BOOKED -->
+                                            <div class="alert alert-secondary">
+                                                This time slot is not booked in the past.
+                                            </div>
+
+                                            <table class="table table-bordered">
+                                                <tr>
+                                                    <th>Court</th>
+                                                    <td>
+                                                        <%= courtId %>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <td>
+                                                        <%= date %>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Time</th>
+                                                    <td>
+                                                        <%= time %>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Status</th>
+                                                    <td>PAST</td>
+                                                </tr>
+                                            </table>
+
+                                            <% } else { %>
+                                                <h5 class="mb-3">Create Walk-in Booking</h5>
+
+                                                <form method="post" action="/admin/booking/create">
+                                                    <input type="hidden" name="courtId" value="<%= courtId %>" />
+                                                    <input type="hidden" name="date" value="<%= date %>" />
+                                                    <input type="hidden" name="startTime" value="<%= time %>" />
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Customer name</label>
+                                                        <input name="fullName" class="form-control" required />
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Phone</label>
+                                                        <input name="phone" class="form-control" required />
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Address</label>
+                                                        <input name="address" class="form-control" />
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Price</label>
+                                                        <input name="price" class="form-control" required />
+                                                    </div>
+
+                                                    <button class="btn btn-success">Create Booking</button>
+                                                </form>
+
+                                                <% } %>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </main>
+
+                    <%- include('../layout/footer'); -%>
+                </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous"></script>
+        <script src="/admin/js/scripts.js"></script>
+</body>
+
+</html>
