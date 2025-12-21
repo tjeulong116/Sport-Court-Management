@@ -1,14 +1,45 @@
 import { Request, Response } from "express";
-import { getProducts } from "services/client/item.service";
+import { countTotalProductClientPages, getProducts } from "services/client/item.service";
+import { getProductWithFilter, userFilter } from "services/client/product.filter";
 import { getAllUsers, handleCreateUser, handleDeleteUser, getUserById, updateUserById, getAllRoles } from "services/client/user.service";
 
 const getHomePage = async (req: Request, res: Response) => {
-    const products = await getProducts();
-    const user = req.user;
-    console.log(">>> current user: ", user);
+    const { page } = req.query;
+    let currentPage = page ? +page : 1;
+    if (currentPage <= 0) {
+        currentPage = 1;
+    }
+
+    const products = await getProducts(currentPage, 8);
+    const totalPages = await countTotalProductClientPages(8);
 
     return res.render("client/home/show.ejs", {
-        products
+        products: products,
+        totalPages: +totalPages,
+        page: +currentPage
+    });
+}
+
+const getProductFilterPage = async (req: Request, res: Response) => {
+    const { page, brand = "", level = "", price = "", sort = "" } = req.query as {
+        page?: string;
+        brand: string;
+        level: string;
+        price: string;
+        sort: string;
+    };
+
+    let currentPage = page ? +page : 1;
+    if (currentPage <= 0) {
+        currentPage = 1;
+    }
+
+    const data = await getProductWithFilter(currentPage, 6, brand, level, price, sort);
+
+    return res.render("client/product/filter.ejs", {
+        products: data.products,
+        totalPages: +data.totalPages,
+        page: +currentPage
     });
 }
 
@@ -60,4 +91,4 @@ const postUpdateUser = async (req: Request, res: Response) => {
     return res.redirect('/admin/user');
 }
 
-export { getHomePage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUser, postUpdateUser };
+export { getHomePage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUser, postUpdateUser, getProductFilterPage };
