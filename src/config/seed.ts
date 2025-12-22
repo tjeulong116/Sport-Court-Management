@@ -65,7 +65,7 @@ const initDatabase = async () => {
                 name: "Yonex Astrox 77 Play",
                 price: 999000,
                 detailDesc: "Vợt cầu lông Yonex Astrox 77 Play là phiên bản của Yonex thuộc bộ sưu tập Yonex Astrox 77 Pro, Tour, Play. Là phiên bản thấp nhất trong bộ sưu tập đáp ứng cho người yêu thích nhà Yonex mà lại vừa mới ra mắt, giá cả phải chăng phù hợp cho các bạn học sinh sinh viên.",
-                shortDesc: "Vợt cầu lông Yonex Astrox 77 Play là phiên bản dành cho người mới chơi hỗ trợ cực tốt cho những bạn yêu thích lối chơi Phòng Thủ, Phản Tạt, Đánh Lưới",
+                shortDesc: " Tấn Công",
                 quantity: 200,
                 brand: "YONEX",
                 level: "BEGINNER",

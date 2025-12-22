@@ -256,4 +256,13 @@ const getOrderHistory = async (userId: number) => {
     })
 }
 
-export { getProducts, getProductById, addProductToCart, getProductInCart, deleteProductInCart, updateCartDetailBeforeCheckout, handlePlaceOrder, getOrderHistory, countTotalProductClientPages };
+const getBookingHistory = async (userId: number) => {
+    return await prisma.booking.findMany({
+        where: { userId },
+        include: {
+            court: true
+        }
+    })
+}
+
+export { getProducts, getProductById, addProductToCart, getProductInCart, deleteProductInCart, updateCartDetailBeforeCheckout, handlePlaceOrder, getOrderHistory, countTotalProductClientPages, getBookingHistory };

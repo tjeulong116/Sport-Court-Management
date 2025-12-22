@@ -100,6 +100,41 @@
             border-radius: 10px;
             padding: 20px;
         }
+
+        /* booking legend */
+        .booking-legend {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .legend-box {
+            width: 22px;
+            height: 18px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* Match slot colors */
+        .legend-box.available {
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+        }
+
+        .legend-box.booked {
+            background-color: #f8d7da;
+        }
+
+        .legend-box.locked {
+            background-color: #999;
+        }
     </style>
 </head>
 
@@ -114,194 +149,206 @@
     <!-- Header -->
     <%- include('../layout/header'); -%>
 
-        <!-- Banner -->
-        <%- include('../layout/banner'); -%>
+        <!-- Booking Section -->
+        <div class="container py-5">
+            <div class="booking-box">
 
-            <!-- Booking Section -->
-            <div class="container py-5">
-                <div class="booking-box">
-
-                    <div class="row mb-4">
-                        <div class="col-lg-6">
-                            <h2 class="fw-bold text-primary">🏸 Đặt sân cầu lông</h2>
-                            <p class="text-muted mb-0">
-                                Thứ 2–6: <strong>50.000₫</strong> / 30 phút ·
-                                Thứ 7–CN: <strong>70.000₫</strong> / 30 phút
-                            </p>
-                        </div>
-                        <div class="col-lg-6 text-lg-end mt-3 mt-lg-0">
-                            <input id="bookingDate" type="date" value="<%= date %>"
-                                class="form-control d-inline-block w-auto" onchange="loadGrid()">
-                        </div>
+                <div class="row mb-4">
+                    <div class="col-lg-6">
+                        <h2 class="fw-bold text-primary"> Đặt sân cầu lông</h2>
                     </div>
 
-                    <!-- GRID -->
-                    <div class="booking-grid mb-4">
-                        <table class="table table-bordered booking-table">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Sân / Giờ</th>
-                                </tr>
-                            </thead>
-                            <tbody id="gridBody"></tbody>
-                        </table>
+                    <div class="col-lg-6 text-lg-end mt-3 mt-lg-0">
+                        <input id="bookingDate" type="date" value="<%= date %>"
+                            class="form-control d-inline-block w-auto" onchange="loadGrid()">
                     </div>
-
-                    <!-- SUMMARY -->
-                    <div class="row">
-                        <div class="col-lg-4 ms-auto">
-                            <div class="summary-box">
-                                <h5>🧾 Thông tin đặt sân</h5>
-                                <p>Số khung giờ: <strong id="slotCount">0</strong></p>
-                                <p class="fs-5">
-                                    Tổng tiền:
-                                    <strong class="text-primary" id="totalPrice">0 ₫</strong>
-                                </p>
-                                <button id="btnBook" class="btn btn-primary w-100">
-                                    <i class="fas fa-calendar-check me-2"></i>
-                                    Xác nhận đặt sân
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
+
+                <!-- LEGEND -->
+                <div class="booking-legend mb-3">
+                    <div class="legend-item">
+                        <span class="legend-box available"></span>
+                        <span>Trống</span>
+                    </div>
+
+                    <div class="legend-item">
+                        <span class="legend-box booked"></span>
+                        <span>Đã đặt</span>
+                    </div>
+
+                    <div class="legend-item">
+                        <span class="legend-box locked"></span>
+                        <span>Khóa</span>
+                    </div>
+                </div>
+
+
+                <!-- GRID -->
+                <div class="booking-grid mb-4">
+                    <table class="table table-bordered booking-table">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 100%;">Sân / Giờ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gridBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- SUMMARY -->
+                <div class="row">
+                    <div class="col-lg-4 ms-auto">
+                        <div class="summary-box">
+                            <h5> Thông tin đặt sân</h5>
+                            <p>Số khung giờ: <strong id="slotCount">0</strong></p>
+                            <p class="fs-5">
+                                Tổng tiền:
+                                <strong class="text-primary" id="totalPrice">0 ₫</strong>
+                            </p>
+                            <button id="btnBook" class="btn btn-primary w-100">
+                                <i class="fas fa-calendar-check me-2"></i>
+                                Xác nhận đặt sân
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+        </div>
 
-            <!-- Footer -->
-            <%- include('../layout/footer'); -%>
+        <!-- Footer -->
+        <%- include('../layout/footer'); -%>
 
-                <!-- Back to Top -->
-                <a href="#" class="btn btn-primary rounded-circle back-to-top">
-                    <i class="fa fa-arrow-up"></i>
-                </a>
+            <!-- Back to Top -->
+            <a href="#" class="btn btn-primary rounded-circle back-to-top">
+                <i class="fa fa-arrow-up"></i>
+            </a>
 
-                <!-- JS -->
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-                <script src="/client/js/main.js"></script>
+            <!-- JS -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="/client/js/main.js"></script>
 
-                <script>
-                    let selectedSlots = []; // { courtId, time, price }
+            <script>
+                let selectedSlots = []; // { courtId, time, price }
 
-                    function isWeekend(dateStr) {
-                        const d = new Date(dateStr);
-                        return d.getDay() === 0 || d.getDay() === 6;
-                    }
+                function isWeekend(dateStr) {
+                    const d = new Date(dateStr);
+                    return d.getDay() === 0 || d.getDay() === 6;
+                }
 
-                    function slotPrice(dateStr) {
-                        return isWeekend(dateStr) ? 70000 : 50000;
-                    }
+                function slotPrice(dateStr) {
+                    return isWeekend(dateStr) ? 70000 : 50000;
+                }
 
-                    async function loadGrid() {
-                        selectedSlots = [];
-                        updateSummary();
+                async function loadGrid() {
+                    selectedSlots = [];
+                    updateSummary();
 
-                        const date = document.getElementById("bookingDate").value;
-                        const res = await fetch(`/api/booking/grid?date=${date}`);
-                        const grid = await res.json();
+                    const date = document.getElementById("bookingDate").value;
+                    const res = await fetch(`/api/booking/grid?date=${date}`);
+                    const grid = await res.json();
 
-                        renderGrid(grid, date);
-                    }
+                    renderGrid(grid, date);
+                }
 
-                    function renderGrid(grid, date) {
-                        const tbody = document.getElementById("gridBody");
-                        tbody.innerHTML = "";
+                function renderGrid(grid, date) {
+                    const tbody = document.getElementById("gridBody");
+                    tbody.innerHTML = "";
 
-                        if (!grid.length) return;
+                    if (!grid.length) return;
 
-                        const thead = document.querySelector("thead tr");
-                        thead.innerHTML = "<th>Sân / Giờ</th>";
-                        grid[0].slots.forEach(s => {
-                            thead.innerHTML += `<th>${s.time}</th>`;
+                    const thead = document.querySelector("thead tr");
+                    thead.innerHTML = "<th>Sân/Giờ</th>";
+                    grid[0].slots.forEach(s => {
+                        thead.innerHTML += `<th>${s.time}</th>`;
+                    });
+
+                    const price = slotPrice(date);
+
+                    grid.forEach(court => {
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `<th>${court.courtName}</th>`;
+
+                        court.slots.forEach(slot => {
+                            const td = document.createElement("td");
+                            td.className = `slot slot-${slot.status}`;
+                            //td.innerHTML = `${slot.time}<small>${price.toLocaleString("vi-VN")} ₫</small>`;
+
+                            if (slot.status === "AVAILABLE") {
+                                td.dataset.court = court.courtId;
+                                td.dataset.time = slot.time;
+                                td.dataset.price = price;
+                                td.onclick = () => toggleSlot(td);
+                            }
+
+                            tr.appendChild(td);
                         });
 
-                        const price = slotPrice(date);
+                        tbody.appendChild(tr);
+                    });
+                }
 
-                        grid.forEach(court => {
-                            const tr = document.createElement("tr");
-                            tr.innerHTML = `<th>${court.courtName}</th>`;
+                function toggleSlot(td) {
+                    const courtId = Number(td.dataset.court);
+                    const time = td.dataset.time;
+                    const price = Number(td.dataset.price);
 
-                            court.slots.forEach(slot => {
-                                const td = document.createElement("td");
-                                td.className = `slot slot-${slot.status}`;
-                                td.innerHTML = `${slot.time}<small>${price.toLocaleString("vi-VN")} ₫</small>`;
+                    const idx = selectedSlots.findIndex(
+                        s => s.courtId === courtId && s.time === time
+                    );
 
-                                if (slot.status === "AVAILABLE") {
-                                    td.dataset.court = court.courtId;
-                                    td.dataset.time = slot.time;
-                                    td.dataset.price = price;
-                                    td.onclick = () => toggleSlot(td);
-                                }
+                    if (idx >= 0) {
+                        selectedSlots.splice(idx, 1);
+                        td.classList.remove("slot-SELECTED");
+                    } else {
+                        selectedSlots.push({ courtId, time, price });
+                        td.classList.add("slot-SELECTED");
+                    }
 
-                                tr.appendChild(td);
-                            });
+                    updateSummary();
+                }
 
-                            tbody.appendChild(tr);
+                function updateSummary() {
+                    const total = selectedSlots.reduce((s, x) => s + x.price, 0);
+                    document.getElementById("slotCount").innerText = selectedSlots.length;
+                    document.getElementById("totalPrice").innerText =
+                        total.toLocaleString("vi-VN") + " ₫";
+                }
+
+                document.getElementById("btnBook").onclick = async () => {
+                    if (!selectedSlots.length) {
+                        alert("Vui lòng chọn ít nhất 1 khung giờ");
+                        return;
+                    }
+
+                    const date = document.getElementById("bookingDate").value;
+
+                    const grouped = {};
+                    selectedSlots.forEach(s => {
+                        if (!grouped[s.courtId]) grouped[s.courtId] = [];
+                        grouped[s.courtId].push(s.time);
+                    });
+
+                    for (const courtId in grouped) {
+                        await fetch("/api/booking", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                courtId: Number(courtId),
+                                date,
+                                startTimes: grouped[courtId],
+                                status: "PAID",
+                                price: slotPrice(date)
+                            })
                         });
                     }
 
-                    function toggleSlot(td) {
-                        const courtId = Number(td.dataset.court);
-                        const time = td.dataset.time;
-                        const price = Number(td.dataset.price);
+                    window.location.href = "/thanks";
+                };
 
-                        const idx = selectedSlots.findIndex(
-                            s => s.courtId === courtId && s.time === time
-                        );
-
-                        if (idx >= 0) {
-                            selectedSlots.splice(idx, 1);
-                            td.classList.remove("slot-SELECTED");
-                        } else {
-                            selectedSlots.push({ courtId, time, price });
-                            td.classList.add("slot-SELECTED");
-                        }
-
-                        updateSummary();
-                    }
-
-                    function updateSummary() {
-                        const total = selectedSlots.reduce((s, x) => s + x.price, 0);
-                        document.getElementById("slotCount").innerText = selectedSlots.length;
-                        document.getElementById("totalPrice").innerText =
-                            total.toLocaleString("vi-VN") + " ₫";
-                    }
-
-                    document.getElementById("btnBook").onclick = async () => {
-                        if (!selectedSlots.length) {
-                            alert("Vui lòng chọn ít nhất 1 khung giờ");
-                            return;
-                        }
-
-                        const date = document.getElementById("bookingDate").value;
-
-                        const grouped = {};
-                        selectedSlots.forEach(s => {
-                            if (!grouped[s.courtId]) grouped[s.courtId] = [];
-                            grouped[s.courtId].push(s.time);
-                        });
-
-                        for (const courtId in grouped) {
-                            await fetch("/api/booking", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({
-                                    courtId: Number(courtId),
-                                    date,
-                                    startTimes: grouped[courtId],
-                                    status: "PAID",
-                                    price: slotPrice(date)
-                                })
-                            });
-                        }
-
-                        alert("🎉 Đặt sân thành công!");
-                        loadGrid();
-                    };
-
-                    loadGrid();
-                </script>
+                loadGrid();
+            </script>
 
 </body>
 

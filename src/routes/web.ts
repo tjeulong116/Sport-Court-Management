@@ -1,5 +1,5 @@
 import express, { Express } from 'express';
-import { getHomePage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUser, postUpdateUser, getProductFilterPage, getBookingPage } from 'controllers/user.controller';
+import { getHomePage, getCreateUserPage, postCreateUser, postDeleteUser, getProductFilterPage, getBookingPage, getClientViewUser, postAdminUpdateUser, getAdminViewUser, postClientUpdateUser } from 'controllers/user.controller';
 import { getAdminOrderDetailPage, getAdminOrderPage, getAdminProductPage, getAdminUserPage, getDashboardPage } from 'controllers/admin/dashboard.controller';
 import fileUploadMiddleware from 'src/middleware/multer';
 import { getAdminCreateProductPage, getViewProduct, postAdminCreateProduct, postDeleteProduct, postUpdateProduct } from 'controllers/admin/product.controller';
@@ -10,6 +10,7 @@ import { isAdmin, isLogin } from 'src/middleware/auth';
 import { createPricing, deletePricing, getPricingPage } from 'controllers/admin/pricing.controller';
 import { cancelBooking, getAdminBookingPage, markBookingPaid } from 'services/admin/booking.service';
 import { getBookingDetailPage, postCreateBooking } from 'controllers/admin/booking.controller';
+import { getBookingHistoryPage } from 'controllers/client/booking.controller';
 
 const router = express.Router();
 
@@ -29,6 +30,8 @@ const webRoutes = (app: Express) => {
     router.post("/logout", postLogout);
     router.get("/register", getRegisterPage);
     router.post("/register", postRegister);
+    router.get("/view-user/:id", getClientViewUser);
+    router.post("/update-user", fileUploadMiddleware("avatar"), postClientUpdateUser);
 
     router.post("/add-product-to-cart/:id", postAddProductToCart);
     router.get("/cart", getCartPage);
@@ -41,6 +44,7 @@ const webRoutes = (app: Express) => {
     router.post("/add-to-cart-from-detail-page/:id", postAddToCartFromDetailPage);
 
     router.get("/booking", getBookingPage);
+    router.get("/booking-history", getBookingHistoryPage);
 
     //admin routes
     router.get("/admin", getDashboardPage);
@@ -48,8 +52,8 @@ const webRoutes = (app: Express) => {
     router.get("/admin/create-user", getCreateUserPage);
     router.post("/admin/handle-create-user", fileUploadMiddleware("avatar"), postCreateUser);
     router.post("/admin/delete-user/:id", postDeleteUser);
-    router.get("/admin/view-user/:id", getViewUser);
-    router.post("/admin/update-user", fileUploadMiddleware("avatar"), postUpdateUser);
+    router.get("/admin/view-user/:id", getAdminViewUser);
+    router.post("/admin/update-user", fileUploadMiddleware("avatar"), postAdminUpdateUser);
 
     router.get("/admin/product", getAdminProductPage);
     router.get("/admin/create-product", getAdminCreateProductPage);

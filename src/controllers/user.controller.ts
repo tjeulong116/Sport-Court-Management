@@ -76,7 +76,7 @@ const postDeleteUser = async (req: Request, res: Response) => {
     return res.redirect('/admin/user');
 }
 
-const getViewUser = async (req: Request, res: Response) => {
+const getAdminViewUser = async (req: Request, res: Response) => {
     const { id } = req.params;
     //get user by id
     const user = await getUserById(id);
@@ -89,7 +89,19 @@ const getViewUser = async (req: Request, res: Response) => {
     });
 }
 
-const postUpdateUser = async (req: Request, res: Response) => {
+const getClientViewUser = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const user = await getUserById(id);
+    const roles = await getAllRoles();
+
+    return res.render("client/user/detail.ejs", {
+        id: id,
+        user: user,
+        roles: roles
+    })
+}
+
+const postAdminUpdateUser = async (req: Request, res: Response) => {
     const { id, fullName, phone, role, address } = req.body;
     const file = req.file;
     const avatar = file?.filename ?? undefined;
@@ -99,4 +111,14 @@ const postUpdateUser = async (req: Request, res: Response) => {
     return res.redirect('/admin/user');
 }
 
-export { getHomePage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUser, postUpdateUser, getProductFilterPage, getBookingPage };
+const postClientUpdateUser = async (req: Request, res: Response) => {
+    const { id, fullName, phone, role, address } = req.body;
+    const file = req.file;
+    const avatar = file?.filename ?? undefined;
+    //update user by id
+    await updateUserById(id, fullName, phone, role, address, avatar);
+
+    return res.redirect(`/view-user/${id}`);
+}
+
+export { getHomePage, getCreateUserPage, postCreateUser, postDeleteUser, getAdminViewUser, postAdminUpdateUser, getProductFilterPage, getBookingPage, getClientViewUser, postClientUpdateUser };
