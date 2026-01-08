@@ -18,7 +18,7 @@ export async function getGrid(req: Request, res: Response) {
 
 export async function postBooking(req: Request, res: Response) {
     try {
-        const userId = req.user!.id; // you already use passport
+        const userId = req.user!.id;
         const { courtId, date, startTimes } = req.body;
 
         const bookings = await createBooking({

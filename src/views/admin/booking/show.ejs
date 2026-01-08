@@ -76,20 +76,40 @@
                             <div class="card mb-4">
                                 <div class="card-body">
                                     <form method="get" action="/admin/booking" class="row g-3 align-items-center">
+
+                                        <div class="col-auto">
+                                            <button type="button" class="btn btn-outline-primary"
+                                                onclick="changeDate(-1)">
+                                                <i class="fas fa-chevron-left"></i>
+                                            </button>
+                                        </div>
+
                                         <div class="col-auto">
                                             <label class="fw-bold">Date:</label>
                                         </div>
+
                                         <div class="col-auto">
-                                            <input type="date" name="date" value="<%= date %>" class="form-control" />
+                                            <input id="bookingDate" type="date" name="date" value="<%= date %>"
+                                                class="form-control" />
                                         </div>
+
                                         <div class="col-auto">
                                             <button class="btn btn-primary">
                                                 <i class="fas fa-search"></i> Load
                                             </button>
                                         </div>
+
+                                        <div class="col-auto">
+                                            <button type="button" class="btn btn-outline-primary"
+                                                onclick="changeDate(1)">
+                                                <i class="fas fa-chevron-right"></i>
+                                            </button>
+                                        </div>
+
                                     </form>
                                 </div>
                             </div>
+
 
                             <!-- GRID -->
                             <div class="card mb-4">
@@ -125,9 +145,10 @@
                                                             <a href="/admin/booking/detail?courtId=<%= court.courtId %>&date=<%= date %>&time=<%= slot.time %>"
                                                                 style="display:block; width:100%; height:100%; text-decoration:none; color:inherit;">
 
-                                                                <% if (slot.status==="AVAILABLE" || slot.status==="PAST"
-                                                                    ) { %>
-                                                                    <%= slot.status %>
+                                                                <% if (slot.status==="AVAILABLE" ) { %>
+                                                                    AVAIL
+                                                                    <% } else if (slot.status==="PAST" ) { %>
+                                                                        PAST
                                                                         <% } else { %>
                                                                             <strong>
                                                                                 <%= slot.user?.name %>
@@ -138,6 +159,7 @@
                                                                                     }).format(slot.price) %>
                                                                             </small>
                                                                             <% } %>
+
                                                             </a>
                                                         </td>
 
@@ -159,6 +181,23 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
             crossorigin="anonymous"></script>
         <script src="/admin/js/scripts.js"></script>
+        <script>
+            function changeDate(delta) {
+                const input = document.getElementById("bookingDate");
+                const current = new Date(input.value);
+
+                current.setDate(current.getDate() + delta);
+
+                const yyyy = current.getFullYear();
+                const mm = String(current.getMonth() + 1).padStart(2, "0");
+                const dd = String(current.getDate()).padStart(2, "0");
+
+                const newDate = `${yyyy}-${mm}-${dd}`;
+
+                window.location.href = `/admin/booking?date=${newDate}`;
+            }
+        </script>
+
 
 </body>
 
